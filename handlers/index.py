@@ -12,10 +12,9 @@ import re
 import json
 import threading
 import time
-from bs4 import BeautifulSoup 
+
 from methods import readdb as mrd
-import numpy as np
-import matplotlib.pyplot as plt
+
 ## 填写 apiKey APISECRET
 apiKey = 'BE42D7F2-DA9C-4283-ACFA-742A52871E8A'
 secretKey = 'e8da6133d189f5d65c54bfaeac8d0124b8a599718d77f8c272f6770e5c8cd88c'
