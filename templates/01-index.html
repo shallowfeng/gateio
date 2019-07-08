@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>gateio</title>
+</head>
+<body>
+	<button onclick="get_pairs1()">所有交易对1</button>
+	<button onclick="get_marketinfo1()">交易市场订单参数1</button>
+	<button onclick="get_marketlist1()">交易市场详细行情1</button>
+	<button onclick="get_tickers1()">所有交易行情1</button>
+	<button onclick="get_orderbooks1()">市场深度1</button>
+	<button onclick="get_history1()">历史交易1</button>
+	<button onclick="get_candlestick2()">获取k线图数据</button>
+	<button onclick="get_account()">获取帐号资余额</button>
+	<button onclick="sell_all()">卖出所有币</button>
+	<div class="coin_list">
+		<div class="coin">
+			请输入币种（小写）:<input type="text">
+			<button onclick="run(event)">启动数据采集与绘图</button>
+			<button onclick="stop(event)">停止数据采集与绘图</button>
+			<button onclick="run1(event)">启动监控</button>
+			<button onclick="stop1(event)">停止监控</button>
+			<button onclick="run2(event)">启动自动交易</button>
+			<button onclick="stop2(event)">停止自动交易</button>
+		</div>
+	</div>
+	<a  onclick="add_coin()" style="text-decoration:underline;cursor:pointer;">增加币种</a>
+	
+</body>
+<div class="container_list">
+<!-- 	<div class="coin_container"> -->
+<!-- 		<div id="btc_container" style="max-width:800px;height:400px"></div> -->
+<!-- 		<div id="btc_container1" style="max-width:800px;height:400px"></div> -->
+<!-- 		<div id="btc_container2" style="max-width:800px;height:400px"></div> -->
+<!-- 	</div>	 -->
+</div>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/ajax.js"></script>
+<script src="js/highcharts.js"></script>
+<script>
+var status_arr=[];//状态数组，管理所有币的开关
+var time_status=1;
+function time_control(){
+	setTimeout(function(){
+		var time=new Date();
+		var mi=time.getMinutes();
+		if(mi%15==0){
+			if(time_status==1){
+				console.log(time);
+				for(var i=0;i<status_arr.length;i++){
+					get_history_price1(status_arr[i]['name'],15);//采集15分钟数据（用于3线）
+					get_MAn(status_arr[i]['name'],15);//采集日均线数据
+					get_kdj(status_arr[i]['name'],15); //采集kdj数据
+					get_macd(status_arr[i]['name'],15); //采集macd数据
+					run_autotrading(status_arr[i]['name']);//执行自动交易程序	
+					get_line(status_arr[i]['name']);
+				}
+				time_status=0;//关闭 避免重复执行
+			}
+		}else{
+			time_status=1;//打开 以便下次继续执行
+		}
+		time_control();
+	},1000)
+}
+time_control();
+function get_pairs1(){
+	var api="pairs";
+	data={
+		action: "getinfo1",
+		api:api
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				alert(ret.message)
+			}
+		}
+	}); 
+}		
+function get_marketinfo1(){
+	var api="marketinfo";
+	data={
+		action: "getinfo1",
+		api:api
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				alert(ret.message)
+			}
+		}
+	}); 
+}		
+function get_marketlist1(){
+	var api="marketlist";
+	data={
+		action: "getinfo1",
+		api:api
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				alert(ret.message)
+			}
+		}
+	}); 
+}		
+function get_tickers1(){
+	api="tickers";
+	data={
+		action: "getinfo1",
+		api:api,
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				alert(ret.message)
+			}
+		}
+	}); 
+}		
+function get_orderbooks1(){
+	var api="orderBooks";
+	data={
+		action: "getinfo1",
+		api:api
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				alert(ret.message)
+			}
+		}
+	}); 
+}
+function get_history1(){
+	var api="tradeHistory";
+	data={
+		action: "getinfo1",
+		api:api
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				alert(ret.message)
+			}
+		}
+	}); 
+}
+function get_candlestick2(){
+	var curr='btc_usdt';
+	var url="http://data.gateio.io/api2/1/candlestick2/"+curr+"?group_set=60&range_hour=1";
+	data={
+		action: "getinfo",
+		url:url
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				alert(ret.message)
+			}
+		}
+	}); 
+}
+function get_account(){
+	var api="balances";
+	data={
+		action: "getinfo1",
+		api:api
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				alert(ret.message)
+			}
+		}
+	}); 
+}
+/**************************采集t秒前历史成交价***********************************/
+function get_history_price(curr,t){
+	var status2=0;
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status2=status_arr[i]['status2'];
+		}
+	}
+	if(status2==1){
+		data={
+			action:"historyprice",
+			t:t,
+			curr:curr
+		}
+		$.ajax({  
+			type: "POST",  
+			url:"/",  
+			data:data,  
+			async: true,  
+			error: function(ret) {  
+				//alert("Error");
+			},  
+			success: function(ret){
+				if(ret.error==0){
+					//console.log(ret.data);
+				}else{
+					//alert(ret.message)
+				}
+			}
+		});
+		setTimeout(function(){
+			get_history_price(curr,t);
+		},t*1000)
+	}
+}		
+/*********************采集t分钟历史成交价****************************************/
+function get_history_price1(curr,t){
+	var status1=0;
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status1=status_arr[i]['status1'];
+		}
+	}
+	if(status1==1){
+		data={
+			action:"historyprice1",
+			t:t,
+			curr:curr
+		}
+		$.ajax({  
+			type: "POST",  
+			url:"/",  
+			data:data,  
+			async: false,  
+			error: function(ret) {  
+				//alert("Error");
+			},  
+			success: function(ret){
+				if(ret.error==0){
+					//console.log(ret.data);
+				}else{
+					//alert(ret.message)
+				}
+			}
+		}); 
+	}
+}	
+/************************采集日均线值（每15分钟采集一次）*************************************/
+//t=15、30、60分别代表15分、30分、1小时状态下
+function get_MAn(curr,t){
+	setTimeout(function(){
+		var status1=0;
+		for(var i=0;i<status_arr.length;i++){
+			if(status_arr[i]['name']==curr){
+				status1=status_arr[i]['status1'];
+			}
+		}
+		if(status1==1){
+			data={
+				action:"getMA",
+				t:t,
+				curr:curr
+			}
+			$.ajax({  
+				type: "POST",  
+				url:"/ma",  
+				data:data,  
+				async: false,  
+				error: function(ret) {  
+					//alert("Error");
+				},  
+				success: function(ret){
+					if(ret.error==0){
+						//console.log(ret.data);
+					}else{
+						//alert(ret.message)
+					}
+				}
+			}); 
+		}
+	},30*1000)	
+}
+/************************获取日均线图*************************************/
+function get_MAn_line(curr){
+	data={
+		action:"getMA_line",
+		curr:curr
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/ma",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			//alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				highcharts_ma(curr,ret.ma5,ret.ma10,ret.ma20)
+			}else{
+				console.log(ret.message);
+				//alert(ret.message)
+			}
+		}
+	}); 
+}
+/************************采集J/K/D值（每15分钟一次）*************************************/
+function get_kdj(curr,t){
+	setTimeout(function(){
+		var status1=0;
+		for(var i=0;i<status_arr.length;i++){
+			if(status_arr[i]['name']==curr){
+				status1=status_arr[i]['status1'];
+			}
+		}
+		if(status1==1){
+			data={
+				action:"getKdj",
+				t:t,
+				curr:curr
+			}
+			$.ajax({  
+				type: "POST",  
+				url:"/kdj",  
+				data:data,  
+				async: false,  
+				error: function(ret) {  
+					//alert("Error");
+				},  
+				success: function(ret){
+					if(ret.error==0){
+						//console.log(ret.data);
+					}else{
+						//alert(ret.message)
+					}
+				}
+			}); 
+		}
+	},30*1000)
+}
+/************************获取kdj曲线图*************************************/
+function get_kdj_line(curr){
+	data={
+		action:"getkdj_line",
+		curr:curr
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/kdj",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			//alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				highcharts_kdj(curr,ret.k,ret.d,ret.j);
+			}else{
+				console.log(ret.message);
+				//alert(ret.message)
+			}
+		}
+	}); 
+}
+/************************采集MACD值（每15分钟一次）*************************************/
+function get_macd(curr,t){
+	setTimeout(function(){
+		var status1=0;
+		for(var i=0;i<status_arr.length;i++){
+			if(status_arr[i]['name']==curr){
+				status1=status_arr[i]['status1'];
+			}
+		}
+		if(status1==1){
+			data={
+				action:"getMACD",
+				t:t,
+				curr:curr
+			}
+			$.ajax({  
+				type: "POST",  
+				url:"/macd",  
+				data:data,  
+				async: false,  
+				error: function(ret) {  
+					//alert("Error");
+				},  
+				success: function(ret){
+					if(ret.error==0){
+						//console.log(ret.data);
+					}else{
+						//alert(ret.message)
+					}
+				}
+			}); 
+		}
+	},30*1000)
+}
+/************************获取macd曲线图*************************************/
+function get_macd_line(curr){
+	data={
+		action:"getmacd_line",
+		curr:curr
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/macd",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			//alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				highcharts_macd(curr,ret.dif,ret.dea)
+			}else{
+				//alert(ret.message)
+				console.log(ret.message);
+			}
+		}
+	}); 
+}
+/************************卖出所有币***********************************/
+function sell_all(){
+	data={
+		action:"sellall"
+	}
+	$.ajax({  
+		type: "POST",  
+		url:"/",  
+		data:data,  
+		async: true,  
+		error: function(ret) {  
+			//alert("Error");
+		},  
+		success: function(ret){
+			if(ret.error==0){
+				console.log(ret.data);
+			}else{
+				//console(ret.message)
+				
+			}
+		}
+	}); 
+}
+/**************************绘制kdj曲线图******************************/
+function highcharts_kdj(curr,k,d,j){
+	var coin_name=curr.split("_")[0];
+	var str="#"+coin_name+"_container1";
+	$(str).highcharts({
+	title: {
+		text: '24小时kdj曲线图(15分钟)'
+	},
+	subtitle: {
+		text: '数据来源：'+curr
+	},
+    xAxis: {
+		title: {
+			text: '单位/分'
+		},
+		minRange:720,
+		min:0,
+	},
+	yAxis: {
+		title: {
+			text: '数值'
+		}
+	},
+	legend: {
+		layout: 'vertical',
+		align: 'right',
+		verticalAlign: 'middle'
+	},
+	plotOptions: {
+		series: {
+			marker: {
+				radius:0,
+				lineWidth:0,
+				states:{
+					hover:{
+						enabled:false
+					}
+				}
+			},
+		},
+	},
+	series: [{
+			name:'k',
+			color:'#BF9022',
+			pointInterval:15,
+			data: k
+		},{
+			name:'d',
+			color:'#47A4BE',
+			pointInterval:15,
+			data: d
+		},{
+			name:'j',
+			color:'#E370CE',
+			pointInterval:15,
+			data: j
+			}
+		]
+    });
+}
+/**************************绘制日均曲线图*****************************/
+function highcharts_ma(curr,ma5,ma10,ma20){
+	var coin_name=curr.split("_")[0];
+	var str="#"+coin_name+"_container";
+	$(str).highcharts({
+	title: {
+		text: '24小时日均线图(15分钟)'
+	},
+	subtitle: {
+		text: '数据来源：'+curr
+	},
+    xAxis: {
+		title: {
+			text: '单位/分'
+		},
+		minRange:720,
+		min:0,
+	},
+	yAxis: {
+		title: {
+			text: '数值'
+		}
+	},
+	legend: {
+		layout: 'vertical',
+		align: 'right',
+		verticalAlign: 'middle'
+	},
+	plotOptions: {
+		series: {
+			marker: {
+				radius:0,
+				lineWidth:0,
+				states:{
+					hover:{
+						enabled:false
+					}
+				}
+			},
+		},
+	},
+	series: [{
+			name:'M5',
+			color:'#BF9022',
+			pointInterval:15,
+			data: ma5
+		},{
+			name:'M10',
+			color:'#47A4BE',
+			pointInterval:15,
+			data: ma10
+		},{
+			name:'M20',
+			color:'#E370CE',
+			pointInterval:15,
+			data: ma20
+			}
+		]
+    });
+}
+/**************************绘制MACD曲线图*****************************/
+function highcharts_macd(curr,dif,dea){
+	var coin_name=curr.split("_")[0];
+	var str="#"+coin_name+"_container2";
+	$(str).highcharts({
+	title: {
+		text: '24小时MACD曲线图(15分钟)'
+	},
+	subtitle: {
+		text: '数据来源：'+curr
+	},
+    xAxis: {
+		title: {
+			text: '单位/分'
+		},
+		minRange:720,
+		min:0,
+	},
+	yAxis: {
+		title: {
+			text: '数值'
+		}
+	},
+	legend: {
+		layout: 'vertical',
+		align: 'right',
+		verticalAlign: 'middle'
+	},
+	plotOptions: {
+		series: {
+			marker: {
+				radius:0,
+				lineWidth:0,
+				states:{
+					hover:{
+						enabled:false
+					}
+				}
+			},
+		},
+	},
+	series: [{
+			name:'DIF',
+			color:'#BF9022',
+			pointInterval:15,
+			data: dif
+		},{
+			name:'DEA',
+			color:'#47A4BE',
+			pointInterval:15,
+			data: dea
+		}
+		]
+    });
+}
+/******************************绘制曲线图(每15分钟刷新一次)**********************************/
+function get_line(curr){
+	var status1=0;
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status1=status_arr[i]['status1'];
+		}
+	}
+	if(status1==1){
+		get_MAn_line(curr);//日均线
+		get_kdj_line(curr);//kdj线
+		get_macd_line(curr);//macd线
+	}	
+}
+/**********************监控程序1(砸盘监控)***************************/
+function monitoring_plate(curr){
+	get_history_price(curr,10);
+	get_history_price(curr,30);
+	get_history_price(curr,60);
+}
+/***********************监控程序2(溢价监控)(每20秒1次)**************************/
+function monitoring_overprice(curr){
+	var status2=0;
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status2=status_arr[i]['status2'];
+		}
+	}
+	if(status2==1){
+		data={
+			action:"monitoring_overprice",
+			curr:curr
+		}
+		$.ajax({  
+			type: "POST",  
+			url:"/monitoring",  
+			data:data,  
+			async: true,  
+			error: function(ret) {  
+				//alert("Error");
+			},  
+			success: function(ret){
+				if(ret.error==0){
+					get_line(curr);
+				}else{
+					//alert(ret.message)
+				}
+			}
+		});
+	}
+}
+/***********************运行自动交易(15分钟一次)**************************/
+function run_autotrading(curr){
+	setTimeout(function(){
+		var status3=0;
+		for(var i=0;i<status_arr.length;i++){
+			if(status_arr[i]['name']==curr){
+				status3=status_arr[i]['status3'];
+			}
+		}
+		if(status3==1){
+			data={
+				curr:curr
+			}
+			$.ajax({  
+				type: "POST",  
+				url:"/autotrading",  
+				data:data,  
+				async: true,  
+				error: function(ret) {  
+					//alert("Error");
+				},  
+				success: function(ret){
+					if(ret.error==0){
+						
+					}else{
+						//alert(ret.message)
+					}
+				}
+			}); 
+		}
+	},60*1000)
+}
+/*******************启动某个币的数据采集与曲线图**********************/
+function run_coin(curr){
+	var status_obj={}; 
+	//status1 控制所有数据采集与曲线图 1-启动 0-停止 
+	//status2 2大监控 1-启动 0-停止
+	//status3 控制自动交易 1-启动 0-停止
+	status_obj['name']=curr;
+	status_obj['status1']=1;
+	status_obj['status2']=0;
+	status_obj['status3']=0;
+	status_arr.push(status_obj); //将该币的状态加入状态管理数组
+	get_history_price1(curr,15);//采集15分钟数据（用于3线）
+	get_MAn(curr,15);//采集日均线数据
+	get_kdj(curr,15); //采集kdj数据
+	get_macd(curr,15); //采集macd数据
+	get_line(curr);//绘制曲线图
+}
+/*******************启动某个币的2大监控**********************/
+function run_monitoring(curr){
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status_arr[i]['status2']=1;
+		}
+	}
+	//monitoring_plate(curr) //运行砸盘监控
+	var timer=setInterval(function(){
+		monitoring_overprice(curr); //启动溢价监控	
+	},20000);	
+}
+/************************启动某个币的自动交易**************************/
+function run_coin_auto(curr){
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status_arr[i]['status3']=1;
+		}
+	}
+}
+/************************停止某个币的数据采集与2大监控、曲线图***************************/
+function stop_coin(curr){
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status_arr[i]['status1']=0;
+		}
+	}
+}
+/*******************停止某个币的2大监控**********************/
+function stop_monitoring(curr){
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status_arr[i]['status2']=0;
+		}
+	}
+}
+/************************停止某个币的自动交易**************************/
+function stop_coin_auto(curr){
+	for(var i=0;i<status_arr.length;i++){
+		if(status_arr[i]['name']==curr){
+			status_arr[i]['status3']=0;
+		}
+	}
+}
+/********启动数据采集与绘图*********/
+function run(event){
+	var $this=$(event.target);
+	var coin=$this.parent("div").children("input").val();
+	if(coin){
+		var curr=coin+"_usdt";
+		run_coin(curr);
+		add_continer(coin);
+	}else{
+		alert('不能为空');
+	}
+}
+/********停止数据采集与绘图*********/
+function stop(event){
+	var $this=$(event.target);
+	var coin=$this.parent("div").children("input").val();
+	if(coin){
+		var curr=coin+"_usdt";
+		stop_coin(curr)
+	}else{
+		alert('不能为空');
+	}
+}
+/********启动监控*********/
+function run1(event){
+	var $this=$(event.target);
+	var coin=$this.parent("div").children("input").val();
+	if(coin){
+		var curr=coin+"_usdt";
+		run_monitoring(curr);
+	}else{
+		alert('不能为空');
+	}	
+}
+/********停止监控*********/
+function stop1(event){
+	var $this=$(event.target);
+	var coin=$this.parent("div").children("input").val();
+	if(coin){
+		var curr=coin+"_usdt";
+		stop_monitoring(curr);
+	}else{
+		alert('不能为空');
+	}
+}
+/********启动自动交易*********/
+function run2(event){
+	var $this=$(event.target);
+	var coin=$this.parent("div").children("input").val();
+	if(coin){
+		var curr=coin+"_usdt";
+		run_coin_auto(curr)
+	}else{
+		alert('不能为空');
+	}
+}
+/********停止自动交易*********/
+function stop2(event){
+	var $this=$(event.target);
+	var coin=$this.parent("div").children("input").val();
+	if(coin){
+		var curr=coin+"_usdt";
+		stop_coin_auto(curr)
+	}else{
+		alert('不能为空');
+	}
+}
+/*增加币种*/
+function add_coin(){
+	var html=`
+		<div class="coin">
+			请输入币种（小写）:<input type="text">
+			<button onclick="run(event)">启动数据采集与绘图</button>
+			<button onclick="stop(event)">停止数据采集与绘图</button>
+			<button onclick="run1(event)">启动监控</button>
+			<button onclick="stop1(event)">停止监控</button>
+			<button onclick="run2(event)">启动自动交易</button>
+			<button onclick="stop2(event)">停止自动交易</button>
+		</div>
+	`;
+	$(".coin_list").append(html);
+}
+/*增加continer*/
+function add_continer(coin){
+	var html=`
+		<div class="coin_container">
+		<div id="${coin}_container" style="max-width:800px;height:400px"></div>
+		<div id="${coin}_container1" style="max-width:800px;height:400px"></div>
+		<div id="${coin}_container2" style="max-width:800px;height:400px"></div>
+	</div>	
+	`;
+	$(".container_list").append(html);
+}
+</script>
+</html>

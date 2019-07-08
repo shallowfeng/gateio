@@ -1,0 +1,218 @@
+#footer iframe{
+    height:320px;
+}
+#header iframe{
+    height:100px;
+    margin-bottom:20px;
+}
+
+/*banner部分*/
+#banner{
+    width:960px;
+    height:478px;
+    overflow:hidden;
+    position:relative;
+}
+#banner ul.banner-img{
+    position:absolute; left:0;
+}
+#banner ul.banner-img>li{float:left;width:960px;}
+#banner ul.banner-img img{
+    width:960px;
+    height:478px;
+}
+#banner a.ck-slide{
+    position:absolute;
+    top:157px;
+    width:35px;
+    height:70px;
+    border-radius:3px;
+    background:#000;
+    opacity:0.15;
+    transition:all .3s linear;
+}
+#banner a.ck-left{
+    left:5px;
+    background: #000 url(../img/index/arrow-left.png) no-repeat center center;
+}
+#banner a.ck-right{
+    right:5px;
+    background:#000 url(../img/index/arrow-right.png) no-repeat center center;
+}
+#banner a.ck-slide:hover{
+    opacity:0.3;
+}
+#banner ul.indicators{
+    position:absolute;
+    bottom:10px;
+    left:50%;
+    margin-left:-34px;
+}
+#banner ul.indicators li{
+    width:12px;
+    height:12px;
+    background:#fff;
+    border-radius:50%;
+    float:left;
+    margin-right:5px;
+    transition:all .2s linear;
+}
+#banner ul.indicators li:hover,#banner ul.indicators li.hover{
+    cursor:pointer;
+    background-color:#0AA1ED;
+}
+#banner div.left{
+	position:absolute;
+	top:0;
+	left:0;
+	bottom:0;
+	margin:auto;
+	height:43px;
+	cursor:pointer
+}
+#banner div.right{
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	margin:auto;
+	height:43px;
+	cursor:pointer
+}
+/*我们的优势*/
+#our_advantage{
+	height:250px;
+	padding: 20px 0;
+}
+#our_advantage .our_advantage_title{
+	height:50px;
+	text-align: center;
+}
+#our_advantage .our_advantage_title h5{
+	font-size:15px
+}
+#our_advantage .our_advantage_title img{
+	width:36px
+}
+#our_advantage .our_advantage_content_list{
+    display: flex;
+    justify-content: space-between;
+    width:800px;
+    margin: 50px auto;
+}
+#our_advantage .our_advantage_content_list .our_advantage_content{
+    width: 130px;
+    text-align: center;
+    margin: 0 20px;
+}
+#our_advantage .our_advantage_content_list .our_advantage_content span{
+   height:40px;
+   display:inline-block
+}
+#our_advantage .our_advantage_content_list .our_advantage_content img{
+	width:32px;
+}
+#our_advantage .our_advantage_content_list .our_advantage_content h4{
+	margin: 10px 0;
+}
+#our_advantage .our_advantage_content_list .our_advantage_content .line{
+    height: 2px;
+    width: 50px;
+    background: #989898;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+#our_advantage .our_advantage_content_list .our_advantage_content:nth-child(2n) div{
+    background: #E5493A;
+}
+#our_advantage .our_advantage_content_list .our_advantage_content:nth-child(2n) h4{
+    color: #E5493A;
+}
+
+/*最新热门推荐*/
+#hot_recommended{
+	height:300px;
+	background:#2B3340;
+	padding: 20px 0;
+}
+#hot_recommended .hot_recommended_title{
+	height:50px;
+	text-align: center;
+}
+#hot_recommended .hot_recommended_title h5{
+	font-size:15px;
+	color:#fff
+}
+#hot_recommended .hot_recommended_title h5 .seemore{
+	color: #fff;
+    display: inline-block;
+    position: relative;
+    left: 325px;
+    top: 280px;
+    font-size: 16px;
+    -webkit-transform-origin-x: 0;
+    transform: scale(0.8);
+}
+#hot_recommended .hot_recommended_title .color1{
+	display:inline-block;
+	height:2px;
+	width:16px;
+	background:#fff
+}
+#hot_recommended .hot_recommended_title .color2{
+	display:inline-block;
+	height:2px;
+	width:16px;
+	background:#E7980F
+}
+#hot_recommended .hot_recommended_content_list{
+    display: flex;
+    width: 660px;
+    justify-content: space-between;
+    margin: 0 auto;
+	margin-top: 10px;
+}
+#hot_recommended .hot_recommended_content{
+	width:150px;
+	display:inline-block;
+	box-shadow: 1px 1px 1px 1px #202531;
+}
+#hot_recommended .hot_recommended_content img{
+	width:150px;
+	height:120px
+}
+#hot_recommended .hot_recommended_content .text{
+	background: #151A20;
+    color: #fff;
+    padding: 0 0 0 10px;
+	min-height:45px
+}
+#hot_recommended .hot_recommended_content .text .qname{
+    margin: 8px 0 4px 0;
+    display: inline-block;
+}
+#hot_recommended .hot_recommended_content .text .des{
+    font-size: 12px;
+    -webkit-transform-origin-x: 0;
+    transform: scale(0.8);
+    display: inline-block;
+}
+#hot_recommended .hot_recommended_content .buy{
+	background:#2C3343;
+	text-align: center;
+}
+#hot_recommended .hot_recommended_content .buy a{
+    display: inline-block;
+    width: 84px;
+    height: 20px;
+    background: #FBC114;
+    border-radius: 3px;
+    color: black;
+    text-align: center;
+    line-height: 20px;
+    margin: 5px 0;
+	font-size: 13px;
+    -webkit-transform-origin-x: 0;
+/*    transform: scale(0.8);*/
+    font-weight: bold;
+}
