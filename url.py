@@ -4,7 +4,7 @@
 the url structure of website
 """
 
-import importlib.sys 
+import importlib
 importlib.reload(sys)
 
 import tornado.web
