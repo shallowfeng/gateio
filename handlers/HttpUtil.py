@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-import httplib
+import http.client
 import urllib
 import json
 import hashlib
@@ -19,7 +19,7 @@ def getSign(params, secretKey):
 	mySign = hmac.new(bSecretKey, bSign, hashlib.sha512).hexdigest()
 	return mySign
 def httpGet(url, resource, params=''):
-	conn = httplib.HTTPSConnection(url, timeout=10)
+	conn = http.client.HTTPSConnection(url, timeout=1000)
 	conn.request("GET", resource + '/' + params)
 	response = conn.getresponse()
 	data = response.read().decode('utf-8')

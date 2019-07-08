@@ -27,7 +27,7 @@ gate_trade = GateIO(API_TRADE_URL, apiKey, secretKey)
 
 
 # Trading Pairs
-print(gate_query.pairs())
+#print(gate_query.pairs())
 
 
 ## Below, use general methods that query the exchange

@@ -2,9 +2,7 @@
 # coding=utf-8
 
 
-from session import RedisSessionHandler
 import tornado.web
 
 class BaseHandler(tornado.web.RequestHandler):
-    def get_current_user(self):
-		return self.get_session('user')
+    

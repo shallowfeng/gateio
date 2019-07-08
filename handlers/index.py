@@ -3,10 +3,10 @@
 from __future__ import division #是运算采用浮点除法，即2/3=0.6666。
 import tornado.web
 import tornado.gen 
-import urllib2
-from base import BaseHandler
+import urllib.request
 import jinja2
 from jinja2 import Environment, FileSystemLoader
+from base import BaseHandler
 from gateAPI import GateIO
 import re  
 import json
@@ -928,7 +928,7 @@ def level(curr,label):
 				status='sell'
 	return {'key':key,'status':status,'level':level,'level_conditions':json.dumps(level_conditions)}
 class IndexHandler(BaseHandler):
-	@tornado.web.asynchronous
+	
 	@tornado.gen.coroutine
 	def get(self):
 		env = Environment(loader=FileSystemLoader("templates"))
@@ -945,7 +945,7 @@ class IndexHandler(BaseHandler):
 			'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36',
 			'Content-Type':'application/x-www-form-urlencoded'
 			}  
-			response = urllib2.urlopen(url) 
+			response = urllib.request.urlopen(url) 
 			info=response.read()
 			data={"error":0,"data":info}
 			self.write(data)
@@ -1025,7 +1025,7 @@ class IndexHandler(BaseHandler):
 			self.write(data)
 		self.finish()
 class MaHandler(BaseHandler):
-	@tornado.web.asynchronous
+	
 	@tornado.gen.coroutine
 	def post(self):
 		action = self.get_argument("action")
@@ -1100,7 +1100,7 @@ class MaHandler(BaseHandler):
 			self.write(data)
 		self.finish()
 class KdjHandler(BaseHandler):
-	@tornado.web.asynchronous
+	
 	@tornado.gen.coroutine
 	def post(self):
 		action = self.get_argument("action")
@@ -1181,7 +1181,7 @@ class KdjHandler(BaseHandler):
 			self.write(data)
 		self.finish()
 class MacdHandler(BaseHandler):
-	@tornado.web.asynchronous
+	
 	@tornado.gen.coroutine
 	def post(self):
 		action = self.get_argument("action")
@@ -1270,7 +1270,7 @@ class MacdHandler(BaseHandler):
 		self.finish()
 
 class MonitoringHandler(BaseHandler):
-	@tornado.web.asynchronous
+	
 	@tornado.gen.coroutine
 	def post(self):
 		global STATUS
@@ -1472,7 +1472,7 @@ class MonitoringHandler(BaseHandler):
 			self.write(data)
 		self.finish()
 class AutotradingHandler(BaseHandler):
-	@tornado.web.asynchronous
+	
 	@tornado.gen.coroutine
 	def post(self):
 		global STATUS

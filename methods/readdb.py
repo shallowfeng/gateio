@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import MySQLdb
+import pymysql
 # 连接到数据库，返回一个数据库连接对象
 def db_conn():
-	conn= MySQLdb.connect(
+	conn= pymysql.connect(
 #		host = "localhost",
 		host = "127.0.0.1",
 		port = 3306,
 		user = "root",
-		passwd = "root",
+		password = "123456",
 		db = "gateio",
 		charset = "utf8"
 		)
@@ -19,7 +19,7 @@ def db_conn():
 def db_matchone(comm):
 	# 调用db_conn来获得数据库连接
 	conn = db_conn()
-	cursor = conn.cursor(cursorclass=MySQLdb.cursors.DictCursor) # 这里可以强制规定所有的查询结构都已字典而不是元祖的方式来显示，方便取值和处理
+	cursor = conn.cursor() # 这里可以强制规定所有的查询结构都已字典而不是元祖的方式来显示，方便取值和处理
 	# 创建一个指针来接受并运行传入的msyql命令，并将返回这条语句所影响的行数
 	count = cursor.execute(comm)
 	result = ""
