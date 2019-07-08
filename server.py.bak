@@ -10,14 +10,14 @@ from application import application
 
 from tornado.options import define, options
 
-define("port", default = 8000, help = "run on the given port", type = int)
+define("port", default = 8200, help = "run on the given port", type = int)
 # 清空redis中的所有数据，每次重启时运行一次即可
 def clean_redis():
 	r.flushdb()
 # 初始化redis连接并赋值给一个对象，以供全局调用
 r = redis.Redis(host="127.0.0.1", port=6379,db=0)
 def main():
-    clean_redis()
+    #clean_redis()
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)
