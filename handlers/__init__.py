@@ -1,5 +1,5 @@
 import sys
-sys.path.append('.\handlers')
+sys.path.append('.\\handlers')
 
 from gateAPI import *
 from HttpUtil import *
