@@ -2,5 +2,5 @@
 # coding=utf-8
 
 import pymysql
-conn = pymysql.connect(host="127.0.0.1", user="root", password="123456", db="gateio",charset="utf8")
+conn = pymysql.connect(host="192.168.1.129", user="root", password="123456", db="gateio",charset="utf8")
 cur = conn.cursor()
